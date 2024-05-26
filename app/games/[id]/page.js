@@ -35,7 +35,7 @@ export default function GamePage(props) {
     authContext.user && game ? setIsVoted(checkIfUserVoted(game, authContext.user.id)) : setIsVoted(false);
   }, [authContext.user, game]);
 
-   const handleVote = async () => {
+  const handleVote = async () => {
     const jwt = authContext.token
     let usersIdArray = game.users.length
       ? game.users.map((user) => user.id)
