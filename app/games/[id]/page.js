@@ -36,23 +36,27 @@ export default function GamePage(props) {
   }, [authContext.user, game]);
 
   const handleVote = async () => {
-    const jwt = authContext.token;
+    const jwt = authContext.token
+    let usersIdArray = game.users.length
+      ? game.users.map((user) => user.id)
+      : [];
+    usersIdArray.push(authContext.user.id);
     const response = await vote(
       `${endpoints.games}/${game.id}`,
       jwt,
-      [...game.users.map((user) => user.id), authContext.user.id]
+      usersIdArray
     );
-    if (!isResponseOk(response)) 
-      {
-      setGame((prevGame) => ({
-        ...prevGame,
-        users: [...prevGame.users, authContext.user],
-      }));
+    if (!isResponseOk(response)) {
+      setGame(() => {
+        return {
+          ...game,
+          users: [...game.users, authContext.user],
+        };
+      });
       setIsVoted(true);
-      setVoteCount((prevCount) => prevCount + 1);
     }
   };
-  
+
   return (
     <main className="main">
       {game ? (
